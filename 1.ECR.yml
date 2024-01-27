@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: CloudTech ECS Demo
+
+#======================
+# リソース
+#======================
+
+Resources:
+
+#======================
+##### ECR作成 #####
+#======================
+  TodobackendRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: cloudtech/todobackend
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Untagged images",
+                "selection": {
+                  "tagStatus": "untagged",
+                  "countType": "sinceImagePushed",
+                  "countUnit": "days",
+                  "countNumber": 7
+                },
+                "action": {"type": "expire"
+                }
+              }
+            ]
+          }
